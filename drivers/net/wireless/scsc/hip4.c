@@ -1475,7 +1475,7 @@ int hip4_init(struct slsi_hip4 *hip)
 	spin_lock_init(&hip->hip_priv->tx_lock);
 	atomic_set(&hip->hip_priv->in_tx, 0);
 
-        wake_lock_init(&hip->hip_priv->hip4_wake_lock, WAKE_LOCK_SUSPEND, "hip4_wake_lock");
+	wake_lock_init(&hip->hip_priv->hip4_wake_lock, WAKE_LOCK_SUSPEND, "hip4_wake_lock");
 
 	/* Init work structs */
 	hip->hip_priv->hip4_workq = create_singlethread_workqueue("hip4_work");

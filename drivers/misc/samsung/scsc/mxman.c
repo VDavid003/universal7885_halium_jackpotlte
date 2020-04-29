@@ -1059,17 +1059,27 @@ static int mxman_start(struct mxman *mxman)
 
 static bool is_bug_on_enabled(struct scsc_mx *mx)
 {
-	bool bug_on_enabled = false;
+	bool bug_on_enabled;
+	const struct firmware *firm;
+	int r;
+
+	if ((memdump == 3) && (disable_recovery_handling == MEMDUMP_FILE_FOR_RECOVERY))
+		bug_on_enabled = true;
+	else
+		bug_on_enabled = false;
 #ifdef CONFIG_SCSC_LOG_COLLECTION
 	return bug_on_enabled;
 #else
+	/* non SABLE platforms should also follow /sys/wifi/memdump if enabled */
+	if (disable_recovery_handling == MEMDUMP_FILE_FOR_RECOVERY)
+		return bug_on_enabled;
+
+	/* for legacy platforms (including Andorid P) using .memdump.info */
 #if defined(ANDROID_VERSION) && (ANDROID_VERSION >= 90000)
 	#define MX140_MEMDUMP_INFO_FILE	"/data/vendor/conn/.memdump.info"
 #else
 	#define MX140_MEMDUMP_INFO_FILE	"/data/misc/conn/.memdump.info"
 #endif
-	const struct firmware *firm;
-	int r;
 
 	SCSC_TAG_INFO(MX_FILE, "Loading %s file\n", MX140_MEMDUMP_INFO_FILE);
 	r = mx140_request_file(mx, MX140_MEMDUMP_INFO_FILE, &firm);
@@ -1234,6 +1244,11 @@ static void process_panic_record(struct mxman *mxman)
 		if (mxman->fwhdr.m4_panic_record_offset) {
 			m4_panic_record = (u32 *)(mxman->fw + mxman->fwhdr.m4_panic_record_offset);
 			m4_panic_record_ok = fw_parse_m4_panic_record(m4_panic_record, &m4_panic_record_length);
+#ifdef CONFIG_SCSC_MX450_GDB_SUPPORT
+		} else if (mxman->fwhdr.m4_1_panic_record_offset) {
+			m4_1_panic_record = (u32 *)(mxman->fw + mxman->fwhdr.m4_1_panic_record_offset);
+			m4_1_panic_record_ok = fw_parse_m4_panic_record(m4_1_panic_record, &m4_1_panic_record_length);
+#endif
 		} else {
 			SCSC_TAG_INFO(MXMAN, "M4 panic record doesn't exist in the firmware header\n");
 		}
