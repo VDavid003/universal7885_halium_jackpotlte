@@ -218,9 +218,6 @@ quiet_cmd_ihex2fw  = IHEX2FW $@
 quiet_cmd_h16tofw  = H16TOFW $@
       cmd_h16tofw  = $(objtree)/$(obj)/ihex2fw -w $< $@
 
-quiet_cmd_fw7885  = COPY    $@
-      cmd_fw7885  = cp -u $< $@
-
 quiet_cmd_fwbin = MK_FW   $@
       cmd_fwbin = FWNAME="$(patsubst firmware/%.gen.S,%,$@)";		     \
 		  FWSTR="$(subst /,_,$(subst .,_,$(subst -,_,$(patsubst	     \
@@ -263,10 +260,6 @@ $(patsubst %,$(obj)/%.gen.S, $(fw-external-y)): %: $(wordsize_deps) \
 $(patsubst %,$(obj)/%.gen.o, $(fw-shipped-y)): %.gen.o: %
 $(patsubst %,$(obj)/%.gen.o, $(fw-external-y)): $(obj)/%.gen.o: $(fwdir)/%
 
-	
-# Manufacturers don't like to distribute in ihex, I guess I can't blame them.
-#quiet_cmd_copy  = COPY    $@
-#      cmd_copy  = cp -u $< $@
 
 # .ihex is used just as a simple way to hold binary files in a source tree
 # where binaries are frowned upon. They are directly converted with objcopy.
