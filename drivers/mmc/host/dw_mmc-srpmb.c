@@ -29,8 +29,7 @@
 #include "dw_mmc-srpmb.h"
 
 #define MMC_SRPMB_DEVICE_PROPNAME	"samsung,mmc-srpmb"
-#define MMC_BLOCK_NAME			"/dev/block/mmcblk0rpmb"
-
+#define MMC_BLOCK_NAME			"/dev/mmcblk0rpmb"
 #if defined(DEBUG_SRPMB)
 static void dump_packet(u8 *data, int len)
 {

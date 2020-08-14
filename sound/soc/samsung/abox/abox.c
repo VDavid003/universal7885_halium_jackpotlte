@@ -6018,7 +6018,6 @@ static void samsung_abox_bt_probe(struct scsc_bt_audio_driver *driver, struct sc
 
 	data = p_abox_data;
 	dev_info(&data->pdev->dev, "%s\n", __func__);
-
 	if (data->calliope_state == CALLIOPE_ENABLED) {
 		physical_addr = (uint64_t)(bt_audio->abox_physical);
 
