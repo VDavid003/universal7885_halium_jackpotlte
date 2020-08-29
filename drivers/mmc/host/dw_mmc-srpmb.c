@@ -29,7 +29,8 @@
 #include "dw_mmc-srpmb.h"
 
 #define MMC_SRPMB_DEVICE_PROPNAME	"samsung,mmc-srpmb"
-#define MMC_BLOCK_NAME			"/dev/mmcblk0rpmb"
+#define MMC_BLOCK_NAME			"/dev/block/mmcblk0rpmb"
+
 #if defined(DEBUG_SRPMB)
 static void dump_packet(u8 *data, int len)
 {
@@ -177,7 +178,7 @@ static int mmc_rpmb_access(struct _mmc_rpmb_ctx *ctx, struct _mmc_rpmb_req *req)
 			break;
 		}
 
-		result_buf = (u8 *)kzalloc(RPMB_PACKET_SIZE, GFP_KERNEL);
+		result_buf = (u8 *)kzalloc(RPMB_PACKET_SIZE, GFP_NOIO);
 		if (result_buf == NULL) {
 			dev_err(dev, "Memory allocation failed\n");
 			ret = -1;
@@ -227,7 +228,7 @@ wout:
 		icmd.opcode = MMC_WRITE_MULTIPLE_BLOCK;
 		icmd.data_ptr = (unsigned long)req->rpmb_data;
 
-		result_buf = (u8 *)kzalloc(RPMB_PACKET_SIZE, GFP_KERNEL);
+		result_buf = (u8 *)kzalloc(RPMB_PACKET_SIZE, GFP_NOIO);
 		if (result_buf == NULL) {
 			dev_err(dev, "Memory allocation failed\n");
 			ret = -1;
@@ -399,8 +400,8 @@ static int init_mmc_srpmb(struct platform_device *pdev, struct _mmc_rpmb_ctx *ct
 		goto alloc_wsm_fail;
 	}
 
-	dev_info(dev, "srpmb dma addr: virt(%llx), phy(%llx)\n",
-			(uint64_t)ctx->wsm_virtaddr, (uint64_t)ctx->wsm_phyaddr);
+	dev_info(dev, "srpmb dma addr: virt_pK(%pK), phy(%llx)\n",
+			ctx->wsm_virtaddr, (uint64_t)ctx->wsm_phyaddr);
 
 	/* get mmc srpmb irq number */
 	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
