@@ -16,6 +16,7 @@ void exynos_fmp_fips_exit(struct exynos_fmp *fmp);
 int do_fmp_fips_init(struct exynos_fmp *fmp);
 void do_fmp_fips_exit(struct exynos_fmp *fmp);
 bool in_fmp_fips_err(void);
+bool in_fmp_fips_init(void);
 #else
 inline int exynos_fmp_fips_init(struct exynos_fmp *fmp)
 {
@@ -27,6 +28,11 @@ inline void exynos_fmp_fips_exit(struct exynos_fmp *fmp)
 }
 
 inline bool in_fmp_fips_err(void)
+{
+	return 0;
+}
+
+inline bool in_fmp_fips_init(void)
 {
 	return 0;
 }
