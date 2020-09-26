@@ -18,8 +18,16 @@ choice
 config MACH_EXYNOS7885_NONE
 	bool "None"
 
-config MACH_EXYNOS7904_M30LTE_SWA_OPEN
-	bool "Galaxy M30 (SM-M305F)"
+config MACH_EXYNOS7885_JACKPOTLTE_EUR_OPEN
+	bool "Galaxy A8 (SM-A530F)"
+	select EXYNOS_DTBTOOL
+
+config MACH_EXYNOS7885_JACKPOT2LTE_EUR_OPEN
+	bool "Galaxy A8+ (SM-A730F)"
+	select EXYNOS_DTBTOOL
+	
+config MACH_EXYNOS7885_JACKPOTLTE_CAN_OPEN
+	bool "Galaxy A8 (SM-A530W)"
 	select EXYNOS_DTBTOOL
 
 endchoice
